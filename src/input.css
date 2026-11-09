@@ -1,0 +1,392 @@
+@import "tailwindcss";
+
+:root {
+    /* Dark Theme (Default) */
+    --bg-body: #0b1210;
+    --bg-header: #121c19;
+    --bg-surface: #15221e;
+    --bg-surface-elevated: #1a2a25;
+    --bg-surface-subtle: #0e1714;
+    --border-color: #20342e;
+    --border-hover: #2dd4bf;
+
+    --text-primary: #f1f5f3;
+    --text-secondary: #9cb5a8;
+    --text-muted: #647d71;
+
+    --accent-teal: #0f766e;
+    --accent-teal-hover: #115e59;
+    --accent-teal-bright: #2dd4bf;
+    --accent-price: #2dd4bf;
+    --accent-badge-bg: #1a2a25;
+
+    --shadow-main: 0 6px 20px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+/* Light Theme Override */
+html.light-theme {
+    --bg-body: #f3f6f2;
+    --bg-header: #ffffff;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #f0fdf4;
+    --bg-surface-subtle: #f5f8f6;
+    --border-color: #dbe5df;
+    --border-hover: #0f766e;
+
+    --text-primary: #172b26;
+    --text-secondary: #52615a;
+    --text-muted: #64748b;
+
+    --accent-teal: #0f766e;
+    --accent-teal-hover: #115e59;
+    --accent-teal-bright: #0f766e;
+    --accent-price: #0f766e;
+    --accent-badge-bg: #e6f0e9;
+
+    --shadow-main: 0 8px 24px rgba(23, 43, 38, 0.08);
+    --shadow-hover: 0 12px 28px rgba(23, 43, 38, 0.12);
+}
+
+@theme {
+    --color-body: var(--bg-body);
+    --color-header: var(--bg-header);
+    --color-surface: var(--bg-surface);
+    --color-elevated: var(--bg-surface-elevated);
+    --color-subtle: var(--bg-surface-subtle);
+    --color-border: var(--border-color);
+    --color-border-hover: var(--border-hover);
+
+    --color-text-main: var(--text-primary);
+    --color-text-muted: var(--text-secondary);
+    --color-text-subtle: var(--text-muted);
+
+    --color-teal-brand: var(--accent-teal);
+    --color-teal-hover: var(--accent-teal-hover);
+    --color-teal-bright: var(--accent-teal-bright);
+    --color-price: var(--accent-price);
+}
+
+/* Global scroll behavior & typography */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ========================================================
+   Interactive JS Components & State Transitions
+   ======================================================== */
+
+/* 1. Top Ad Slideshow */
+.top-ad-slideshow {
+    background: linear-gradient(135deg, #062824 0%, #0f766e 55%, #134e4a 100%);
+}
+
+.ad-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(20px);
+    transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s;
+    pointer-events: none;
+}
+
+.ad-slide.active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.ad-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.35);
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.ad-dot.active {
+    width: 24px;
+    background-color: #2dd4bf;
+}
+
+/* 2. Hamburger Mobile Toggle */
+.hamburger .bar {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent-teal-bright);
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger.active .bar:nth-child(1) {
+    transform: translateY(8.5px) rotate(45deg);
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8.5px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+    #navbar-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-header);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease-in-out, padding 0.3s ease;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    #navbar-menu.active {
+        max-height: 420px;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-top: 1px solid var(--border-color);
+    }
+}
+
+/* 3. Product Catalog Filter Tabs */
+.filter-tab.active {
+    background-color: var(--accent-teal);
+    color: #ffffff;
+    border-color: var(--accent-teal);
+    box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+}
+
+.product-group {
+    display: none;
+}
+
+.product-group.active {
+    display: block;
+    animation: fadeInGroup 0.35s ease;
+}
+
+@keyframes fadeInGroup {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 4. Info Accordion */
+.info-item.active {
+    border-color: var(--accent-teal);
+    box-shadow: var(--shadow-hover);
+}
+
+.info-item.active .info-chevron {
+    transform: rotate(180deg);
+    color: var(--accent-teal-bright);
+}
+
+.info-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease;
+}
+
+.info-item.active .info-accordion-body {
+    max-height: 1400px;
+    opacity: 1;
+    transition: max-height 0.5s ease-in-out, opacity 0.3s ease;
+}
+
+/* 5. Product Detail Pills & Size/Variant Buttons */
+.nav-pill.active {
+    background-color: var(--accent-teal);
+    color: #ffffff;
+    border-color: var(--accent-teal);
+    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.35);
+}
+
+.size-button.active,
+.variant-button.active {
+    background-color: var(--accent-teal);
+    color: #ffffff;
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 0 2px rgba(45, 212, 191, 0.4);
+    font-weight: 700;
+}
+
+/* 6. FAQ Popup Widget */
+.faq-popup {
+    display: none;
+    animation: slideUpFaq 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.faq-popup.active {
+    display: flex;
+}
+
+@keyframes slideUpFaq {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.faq-item.active .faq-question {
+    color: var(--accent-teal-bright);
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 240px;
+    padding-bottom: 12px;
+}
+
+/* 7. Wishlist / Favorit Button & Drawer */
+.wishlist-btn.active {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.5);
+    background-color: rgba(239, 68, 68, 0.12);
+}
+
+.wishlist-btn.active .heart-icon {
+    fill: #ef4444;
+    stroke: #ef4444;
+    transform: scale(1.15);
+}
+
+.wishlist-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.wishlist-drawer.active {
+    right: 0;
+}
+
+/* Dynamically Generated Wishlist Cards */
+.wishlist-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.wishlist-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+}
+
+.wishlist-card-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: var(--bg-surface-subtle);
+    flex-shrink: 0;
+}
+
+.wishlist-card-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.wishlist-card-category {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-teal-bright);
+}
+
+.wishlist-card-title {
+    margin: 2px 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wishlist-card-price {
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-price);
+}
+
+.wishlist-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wishlist-view-btn {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--accent-teal);
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.wishlist-view-btn:hover {
+    background-color: var(--accent-teal-hover);
+}
+
+.wishlist-remove-btn {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 6px;
+    transition: color 0.2s ease;
+}
+
+.wishlist-remove-btn:hover {
+    color: #ef4444;
+}
